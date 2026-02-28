@@ -1,0 +1,27 @@
+{
+  "name": "google-search-clearer",
+  "version": "0.5.2",
+  "main": "main.js",
+  "scripts": {
+    "start": "concurrently \"vite\" \"electronmon .\""
+  },
+  "dependencies": {
+    "ws": "^8.19.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "concurrently": "^9.1.2",
+    "electron": "^35.0.2",
+    "electronmon": "^2.0.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vite": "^6.0.0"
+  },
+  "electronmon": {
+    "patterns": [
+      "!**/**",
+      "main.js"
+    ],
+    "logLevel": "quiet"
+  }
+}
