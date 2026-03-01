@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "strict": false,
+    "noEmit": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "nodenext",
+    "noImplicitAny": false,
+    "allowImportingTsExtensions": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.js"],
+  "exclude": ["node_modules", ".vite"]
+}
