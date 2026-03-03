@@ -1,6 +1,6 @@
 import {BrowserWindow} from "electron";
 import fs from "fs";
-import {LIVE_CODESPACE_SOLUTION_PATH} from "../shared/config.ts";
+import {LIVE_CODESPACE_SOLUTION_PATH} from "../config.ts";
 
 let lastContent = '';
 

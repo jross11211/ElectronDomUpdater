@@ -1,19 +1,19 @@
-export default function waitForMonaco(){
+export default function waitForEditorLoad(){
 
     const {ipcRenderer} = require('electron');
 
     new MutationObserver((_, observer) => {
         const editor_classes = document.getElementsByClassName("mtk4");
         if (editor_classes.length > 0){
-            console.log('app is loaded')
+
+            ipcRenderer.on('updated-solution', (_, newContent) => {
+                const model = monaco.editor.getModels()[0];
+                model.setValue(newContent);
+            });
+
             ipcRenderer.send('app-full-loaded');
             observer.disconnect()
         }
     })
-    .observe(document, {
-        childList: true,
-        attributes: true,
-        subtree: true,
-        characterData: true
-    });
+    .observe(document, { childList: true });
 }

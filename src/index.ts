@@ -1,7 +1,7 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
-import {URL_TARGET} from "./shared/config.ts";
-import {watchFileChanges} from "./watchers/watchFileChanges.ts";
-import {waitForMonacoLoad, watchDomUpdates} from "./watchers/watchDomUpdates.ts";
+import {URL_TARGET} from "./config.ts";
+import {watchFileChanges} from "./utils/watchFileChanges.ts";
+import waitForEditorLoad from "./injectables/waitForEditorLoad.js";
 
 app.on('ready', () => {
 
@@ -18,14 +18,13 @@ app.on('ready', () => {
     });
 
     ipcMain.once('app-full-loaded', () => {
-        watchDomUpdates(mainWindow)
-            .then(() => {
-                watchFileChanges(mainWindow);
-                mainWindow.webContents.openDevTools();
-            });
+        watchFileChanges(mainWindow);
+        mainWindow.webContents.openDevTools();
     });
 
     mainWindow.loadURL(URL_TARGET)
       .then(() => mainWindow.show())
-      .then(() => waitForMonacoLoad(mainWindow));
+      .then(() => mainWindow.webContents.executeJavaScript(
+          String(waitForEditorLoad)
+      ));
 });
