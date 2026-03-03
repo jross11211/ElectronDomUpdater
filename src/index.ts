@@ -1,12 +1,20 @@
 import {app, BrowserWindow } from 'electron';
-import {URL_TARGET, windowConfig} from "./shared/config.ts";
+import {URL_TARGET} from "./shared/config.ts";
 import {watchFileChanges} from "./watchers/watchFileChanges.ts";
 import {watchDomUpdates} from "./watchers/watchDomUpdates.ts";
 
-// Main electron process - Called after forge.config.ts is loaded
 app.on('ready', () => {
 
-  const mainWindow = new BrowserWindow(windowConfig);
+  const mainWindow = new BrowserWindow({
+      show: false,
+      width: 1024,
+      height: 728,
+      webPreferences: {
+          nodeIntegration: true,
+          contextIsolation: false,
+          webSecurity: false,
+      }
+  });
 
   mainWindow.loadURL(URL_TARGET)
       .then(() => {
