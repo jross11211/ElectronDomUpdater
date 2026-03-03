@@ -1,0 +1,4 @@
+touch .env
+echo "LIVE_CODESPACE_PATH=./_live_code/" >> .env
+echo "LIVE_CODESPACE_SOLUTION_FILE=solution.py" >> .env
+echo "URL_TARGET=https://www.google.com" >> .env
