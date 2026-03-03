@@ -13,6 +13,7 @@ app.on('ready', () => {
           nodeIntegration: true,
           contextIsolation: false,
           webSecurity: false,
+          partition: 'persist:electron-dom-updater'
       }
   });
 
