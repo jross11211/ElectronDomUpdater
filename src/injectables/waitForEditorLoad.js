@@ -1,5 +1,3 @@
-import {ipcRenderer} from "electron";
-
 export default function waitForEditorLoad(){
 
     const {ipcRenderer} = require('electron');
@@ -22,8 +20,6 @@ export default function waitForEditorLoad(){
 
     observer.observe(document, {
         childList: true,
-        attributes: true,
-        subtree: true,
-        characterData: true
+        subtree: true
     });
 }
