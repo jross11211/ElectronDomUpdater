@@ -1,10 +1,9 @@
-import { app, BrowserWindow } from 'electron';
-import fs from "fs";
-import { google_search_listener } from './execute_js_functions.js';
-import {func_as_string} from "./utils.ts";
-import {LIVE_CODESPACE_SOLUTION_PATH, URL_TARGET, windowConfig} from "./config.ts";
-import {handleFileChange} from "./handle_file_change.ts";
+import {app, BrowserWindow } from 'electron';
+import {URL_TARGET, windowConfig} from "./shared/config.ts";
+import {watchFileChanges} from "./watchers/watchFileChanges.ts";
+import {watchDomUpdates} from "./watchers/watchDomUpdates.ts";
 
+// Main electron process - Called after forge.config.ts is loaded
 app.on('ready', () => {
 
   const mainWindow = new BrowserWindow(windowConfig);
@@ -13,14 +12,9 @@ app.on('ready', () => {
       .then(() => {
 
         mainWindow.show();
-
-        fs.watch(LIVE_CODESPACE_SOLUTION_PATH, handleFileChange(mainWindow));
-
-        mainWindow?.webContents.executeJavaScript(
-            func_as_string(google_search_listener, {})
-        )
-        .catch(console.error);
-
         mainWindow.webContents.openDevTools();
-      });
+
+        watchFileChanges(mainWindow);
+        watchDomUpdates(mainWindow);
+    });
 });
