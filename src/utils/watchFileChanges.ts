@@ -9,7 +9,6 @@ export const watchFileChanges = (mainWindow: BrowserWindow) => {
     const handleFileChange = () => {
         const content: string = fs.readFileSync(LIVE_CODESPACE_SOLUTION_PATH, 'utf8');
         if (content !== lastContent) {
-            console.log('Code updated:', content);
             mainWindow.webContents.send('updated-solution', content);
             lastContent = content;
         }

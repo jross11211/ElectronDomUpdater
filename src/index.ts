@@ -17,14 +17,15 @@ app.on('ready', () => {
       }
     });
 
-    ipcMain.once('app-full-loaded', () => {
+    ipcMain.once('app-fully-loaded', () => {
         watchFileChanges(mainWindow);
         mainWindow.webContents.openDevTools();
     });
 
     mainWindow.loadURL(URL_TARGET)
-      .then(() => mainWindow.show())
-      .then(() => mainWindow.webContents.executeJavaScript(
-          String(waitForEditorLoad)
-      ));
+        .then(() => mainWindow.show())
+        .then(() => mainWindow.webContents.executeJavaScript(
+            `(${String(waitForEditorLoad)})()`
+        ))
+        .catch(console.error);
 });
