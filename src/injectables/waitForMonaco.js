@@ -4,7 +4,7 @@ export default function waitForMonaco(){
 
     new MutationObserver((_, observer) => {
         const editor_classes = document.getElementsByClassName("mtk4");
-        if (editor_classes && editor_classes.length > 0 && editor_classes[0].textContent === "class"){
+        if (editor_classes.length > 0){
             console.log('app is loaded')
             ipcRenderer.send('app-full-loaded');
             observer.disconnect()
