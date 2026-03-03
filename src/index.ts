@@ -1,11 +1,11 @@
-import {app, BrowserWindow } from 'electron';
+import {app, BrowserWindow, ipcMain} from 'electron';
 import {URL_TARGET} from "./shared/config.ts";
 import {watchFileChanges} from "./watchers/watchFileChanges.ts";
-import {watchDomUpdates} from "./watchers/watchDomUpdates.ts";
+import {waitForMonacoLoad, watchDomUpdates} from "./watchers/watchDomUpdates.ts";
 
 app.on('ready', () => {
 
-  const mainWindow = new BrowserWindow({
+    const mainWindow = new BrowserWindow({
       show: false,
       width: 1024,
       height: 728,
@@ -15,15 +15,17 @@ app.on('ready', () => {
           webSecurity: false,
           partition: 'persist:electron-dom-updater'
       }
-  });
-
-  mainWindow.loadURL(URL_TARGET)
-      .then(() => {
-
-        mainWindow.show();
-        mainWindow.webContents.openDevTools();
-
-        watchFileChanges(mainWindow);
-        watchDomUpdates(mainWindow);
     });
+
+    ipcMain.once('app-full-loaded', () => {
+        watchDomUpdates(mainWindow)
+            .then(() => {
+                watchFileChanges(mainWindow);
+                mainWindow.webContents.openDevTools();
+            });
+    });
+
+    mainWindow.loadURL(URL_TARGET)
+      .then(() => mainWindow.show())
+      .then(() => waitForMonacoLoad(mainWindow));
 });
