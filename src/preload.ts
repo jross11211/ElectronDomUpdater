@@ -25,15 +25,22 @@ const originalFetch = window.fetch;
 window.fetch = async (...args: [any, any]) => {
     const [resource, init = {}] = args;
 
-    const requestUrl = typeof resource === 'string' ? resource : resource.url;
+    const requestInfo = {
+        url: typeof resource === 'string' ? resource : resource.url,
+        method: init.method || 'GET',
+        headers: init.headers ?? {}
+    };
 
     try {
         const response = await originalFetch(resource, init);
 
-        if (!requestUrl.includes('/submissions/detail/')) return response;
+        if (!requestInfo.url.includes('/submissions/detail/')) return response;
 
         const cloned = response.clone();
         const contentType = response.headers.get('content-type') || '';
+
+        const url = requestInfo.url;
+        if (!url.includes('/submissions/detail/')) return response;
 
         (async () => {
             let body: any;
