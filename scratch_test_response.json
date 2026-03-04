@@ -1,0 +1,71 @@
+{
+  "timestamp": "2026-03-04T18:47:18.668Z",
+  "request": {
+    "url": "/submissions/detail/runcode_1772650039.0435812_zAbwdLjzrr/check/",
+    "method": "GET",
+    "headers": {}
+  },
+  "response": {
+    "url": "https://leetcode.com/submissions/detail/runcode_1772650039.0435812_zAbwdLjzrr/check/",
+    "status": 200,
+    "statusText": "",
+    "headers": "{}",
+    "body": {
+      "status_code": 10,
+      "lang": "python3",
+      "run_success": true,
+      "status_runtime": "0 ms",
+      "memory": 19204000,
+      "display_runtime": "0",
+      "code_answer": [
+        "7",
+        "7",
+        "7",
+        ""
+      ],
+      "code_output": [],
+      "std_output_list": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "elapsed_time": 61,
+      "task_finish_time": 1772650039190,
+      "task_name": "judger.runcodetask.RunCode",
+      "expected_status_code": 10,
+      "expected_lang": "cpp",
+      "expected_run_success": true,
+      "expected_status_runtime": "5",
+      "expected_memory": 9748000,
+      "expected_display_runtime": "0",
+      "expected_code_answer": [
+        "3",
+        "2",
+        "0",
+        ""
+      ],
+      "expected_code_output": [],
+      "expected_std_output_list": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "expected_elapsed_time": 15,
+      "expected_task_finish_time": 1772648620166,
+      "expected_task_name": "judger.interprettask.Interpret",
+      "correct_answer": false,
+      "compare_result": "000",
+      "total_correct": 0,
+      "total_testcases": 3,
+      "runtime_percentile": null,
+      "status_memory": "19.2 MB",
+      "memory_percentile": null,
+      "pretty_lang": "Python3",
+      "submission_id": "runcode_1772650039.0435812_zAbwdLjzrr",
+      "status_msg": "Accepted",
+      "state": "SUCCESS"
+    }
+  }
+}
