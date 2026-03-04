@@ -18,6 +18,11 @@ export default {
           entry: 'src/index.ts',
           config: viteConfigFile,
           target: 'main',
+        },
+        {
+          entry: 'src/preload.ts',
+          config: viteConfigFile,
+          target: 'preload',
         }
       ],
       renderer: [],

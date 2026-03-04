@@ -1,4 +1,5 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
+import path from 'node:path';
 import {URL_TARGET} from "./config.ts";
 import {watchFileChanges} from "./utils/watchFileChanges.ts";
 import waitForEditorLoad from "./injectables/waitForEditorLoad.js";
@@ -11,6 +12,7 @@ app.on('ready', () => {
       width: 1024,
       height: 728,
       webPreferences: {
+          preload: path.join(__dirname, 'preload.js'),
           nodeIntegration: true,
           contextIsolation: false,
           webSecurity: false,
@@ -20,11 +22,11 @@ app.on('ready', () => {
 
     ipcMain.once('app-fully-loaded', () => {
         watchFileChanges(mainWindow);
-        setupNetworkLogging(mainWindow)
         mainWindow.webContents.openDevTools();
     });
 
     mainWindow.loadURL(URL_TARGET)
+        .then(() => setupNetworkLogging(mainWindow))
         .then(() => mainWindow.show())
         .then(() => mainWindow.webContents.executeJavaScript(
             `(${String(waitForEditorLoad)})()`
