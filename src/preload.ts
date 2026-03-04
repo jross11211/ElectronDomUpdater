@@ -28,7 +28,10 @@ window.fetch = async (...args: [any, any]) => {
         const cloned = response.clone();
         const contentType = response.headers.get('content-type') || '';
 
-        // Log asynchronously so we don't block the page from getting its response
+        // Only log submission check requests
+        const url = requestInfo.url;
+        if (!url.includes('/submissions/detail/')) return response;
+
         (async () => {
             try {
                 let body: any;
@@ -39,6 +42,7 @@ window.fetch = async (...args: [any, any]) => {
                 } else {
                     body = `[binary: ${contentType}]`;
                 }
+                if (!body || !body.status_runtime) return;
 
                 ipcRenderer.send('captured-response', {
                     timestamp: new Date().toISOString(),
@@ -54,7 +58,8 @@ window.fetch = async (...args: [any, any]) => {
             } catch (e) {
                 // don't let logging errors affect the page
             }
-        })();
+        })()
+        .catch(console.error);
 
         return response;
     } catch (err) {
