@@ -1,0 +1,44 @@
+=== RESPONSE ===
+Time: 2026-03-04T16:43:42.735Z
+URL: https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/interpret_solution/
+Method: POST
+Status: 200
+From cache: false
+Response Headers:
+{
+  "cf-cache-status": [
+    "DYNAMIC"
+  ],
+  "cf-ray": [
+    "9d72576af970066b-EWR"
+  ],
+  "content-encoding": [
+    "br"
+  ],
+  "content-security-policy": [
+    "frame-ancestors 'self' https://*.leetcode.com https://leetcode.com https://www.growingio.com https://challenges.cloudflare.com"
+  ],
+  "content-type": [
+    "application/json"
+  ],
+  "date": [
+    "Wed, 04 Mar 2026 16:43:43 GMT"
+  ],
+  "server": [
+    "cloudflare"
+  ],
+  "strict-transport-security": [
+    "max-age=15552000; includeSubDomains; preload"
+  ],
+  "vary": [
+    "Authorization, Cookie"
+  ],
+  "x-content-type-options": [
+    "nosniff"
+  ],
+  "x-frame-options": [
+    "DENY"
+  ]
+}
+Timing (partial): {}
+

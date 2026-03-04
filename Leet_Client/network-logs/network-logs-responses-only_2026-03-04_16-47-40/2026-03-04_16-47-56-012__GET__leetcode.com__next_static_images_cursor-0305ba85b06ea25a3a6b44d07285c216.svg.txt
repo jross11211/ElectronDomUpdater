@@ -1,0 +1,74 @@
+=== RESPONSE ===
+Time: 2026-03-04T16:47:56.012Z
+URL: https://leetcode.com/_next/static/images/cursor-0305ba85b06ea25a3a6b44d07285c216.svg
+Method: GET
+Status: 200
+From cache: true
+Response Headers:
+{
+  "age": [
+    "2404"
+  ],
+  "cache-control": [
+    "public, max-age=3600"
+  ],
+  "cf-cache-status": [
+    "HIT"
+  ],
+  "cf-ray": [
+    "9d724ba1a80b8cbf-EWR"
+  ],
+  "content-encoding": [
+    "br"
+  ],
+  "content-type": [
+    "image/svg+xml"
+  ],
+  "date": [
+    "Wed, 04 Mar 2026 16:35:40 GMT"
+  ],
+  "etag": [
+    "W/\"03a45e4c3f480a87d939e6e38a263f62\""
+  ],
+  "expires": [
+    "Wed, 04 Mar 2026 16:46:02 GMT"
+  ],
+  "last-modified": [
+    "Wed, 04 Mar 2026 08:21:06 GMT"
+  ],
+  "server": [
+    "cloudflare"
+  ],
+  "x-cache-status": [
+    "MISS"
+  ],
+  "x-content-type-options": [
+    "nosniff"
+  ],
+  "x-goog-generation": [
+    "1772612466139864"
+  ],
+  "x-goog-hash": [
+    "crc32c=o+aEGg==",
+    "md5=A6ReTD9ICofZOebjiiY/Yg=="
+  ],
+  "x-goog-metageneration": [
+    "1"
+  ],
+  "x-goog-storage-class": [
+    "STANDARD"
+  ],
+  "x-goog-stored-content-encoding": [
+    "identity"
+  ],
+  "x-goog-stored-content-length": [
+    "1279"
+  ],
+  "x-guploader-uploadid": [
+    "AGQBYWwYiQIr3gSWNAjOJczdGNrG2dN7aZEgDSX06baQl9Ax9iIl1ei0rDXzyhoAJZWee0k"
+  ]
+}
+Timing (partial): {}
+
+Final Status: 200
+Final Timing: {}

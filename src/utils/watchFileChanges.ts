@@ -1,6 +1,6 @@
 import {BrowserWindow, ipcMain} from "electron";
 import fs from "fs";
-import {LIVE_CODESPACE_SOLUTION_PATH} from "../config.ts";
+import {LIVE_CODESPACE_SOLUTION_PATH, LIVE_CODESPACE_TESTS_OUTPUT_PATH} from "../config.ts";
 
 let lastContent = '';
 
@@ -20,5 +20,7 @@ export const watchFileChanges = (mainWindow: BrowserWindow) => {
 
     ipcMain.on("tests-updated", (_, tests_output) => {
         console.log(tests_output);
+
+        fs.writeFileSync(LIVE_CODESPACE_TESTS_OUTPUT_PATH, tests_output);
     })
 }

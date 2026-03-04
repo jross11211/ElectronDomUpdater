@@ -1,0 +1,14 @@
+=== RESPONSE ===
+Time: 2026-03-04T16:43:05.235Z
+URL: devtools://devtools/bundled/ui/components/icon_button/icon_button.js
+Method: GET
+Status: 200
+From cache: false
+Response Headers:
+{
+  "Content-Type": [
+    "application/javascript"
+  ]
+}
+Timing (partial): {}
+

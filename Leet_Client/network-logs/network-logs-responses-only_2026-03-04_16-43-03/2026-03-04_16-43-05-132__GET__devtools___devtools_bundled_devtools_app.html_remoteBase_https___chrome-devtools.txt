@@ -1,0 +1,14 @@
+=== RESPONSE ===
+Time: 2026-03-04T16:43:05.132Z
+URL: devtools://devtools/bundled/devtools_app.html?remoteBase=https://chrome-devtools-frontend.appspot.com/serve_file/@d6197c8daad2860207c387286cd3ec7ba27e1ae6/&can_dock=true&toolbarColor=rgba(223,223,223,1)&textColor=rgba(0,0,0,1)&experiments=true
+Method: GET
+Status: 200
+From cache: false
+Response Headers:
+{
+  "Content-Type": [
+    "text/html"
+  ]
+}
+Timing (partial): {}
+

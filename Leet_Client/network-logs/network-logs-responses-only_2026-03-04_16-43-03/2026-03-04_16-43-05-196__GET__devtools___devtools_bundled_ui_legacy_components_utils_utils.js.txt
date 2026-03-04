@@ -1,0 +1,14 @@
+=== RESPONSE ===
+Time: 2026-03-04T16:43:05.196Z
+URL: devtools://devtools/bundled/ui/legacy/components/utils/utils.js
+Method: GET
+Status: 200
+From cache: false
+Response Headers:
+{
+  "Content-Type": [
+    "application/javascript"
+  ]
+}
+Timing (partial): {}
+

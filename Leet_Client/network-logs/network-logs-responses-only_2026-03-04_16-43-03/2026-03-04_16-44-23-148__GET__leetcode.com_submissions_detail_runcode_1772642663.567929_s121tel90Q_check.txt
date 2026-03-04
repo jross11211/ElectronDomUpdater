@@ -1,0 +1,47 @@
+=== RESPONSE ===
+Time: 2026-03-04T16:44:23.148Z
+URL: https://leetcode.com/submissions/detail/runcode_1772642663.567929_s121tel90Q/check/
+Method: GET
+Status: 200
+From cache: false
+Response Headers:
+{
+  "cf-cache-status": [
+    "DYNAMIC"
+  ],
+  "cf-ray": [
+    "9d725867b82e066b-EWR"
+  ],
+  "content-encoding": [
+    "br"
+  ],
+  "content-security-policy": [
+    "frame-ancestors 'self' https://*.leetcode.com https://leetcode.com https://www.growingio.com https://challenges.cloudflare.com"
+  ],
+  "content-type": [
+    "application/json"
+  ],
+  "date": [
+    "Wed, 04 Mar 2026 16:44:23 GMT"
+  ],
+  "server": [
+    "cloudflare"
+  ],
+  "set-cookie": [
+    "csrftoken=b9ujq096KCNhvHso7sdeJPR79hgbONVV; expires=Wed, 03 Mar 2027 16:44:23 GMT; Max-Age=31449600; Path=/; SameSite=Lax; Secure"
+  ],
+  "strict-transport-security": [
+    "max-age=15552000; includeSubDomains; preload"
+  ],
+  "vary": [
+    "Cookie, Authorization"
+  ],
+  "x-content-type-options": [
+    "nosniff"
+  ],
+  "x-frame-options": [
+    "DENY"
+  ]
+}
+Timing (partial): {}
+

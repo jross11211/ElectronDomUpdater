@@ -1,0 +1,41 @@
+=== RESPONSE ===
+Time: 2026-03-04T16:48:21.156Z
+URL: wss://collaboration-ws.leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero
+Method: GET
+Status: 101
+From cache: false
+Response Headers:
+{
+  "CF-RAY": [
+    "9d725e375bd6424a-EWR"
+  ],
+  "Connection": [
+    "upgrade"
+  ],
+  "Date": [
+    "Wed, 04 Mar 2026 16:48:21 GMT"
+  ],
+  "Sec-WebSocket-Accept": [
+    "c5hnToHkRPB40nPGPw/B7tT4qbU="
+  ],
+  "Server": [
+    "cloudflare"
+  ],
+  "Strict-Transport-Security": [
+    "max-age=15552000; includeSubDomains; preload"
+  ],
+  "Upgrade": [
+    "websocket"
+  ],
+  "X-Content-Type-Options": [
+    "nosniff"
+  ],
+  "cf-cache-status": [
+    "DYNAMIC"
+  ],
+  "uWebSockets": [
+    "20"
+  ]
+}
+Timing (partial): {}
+

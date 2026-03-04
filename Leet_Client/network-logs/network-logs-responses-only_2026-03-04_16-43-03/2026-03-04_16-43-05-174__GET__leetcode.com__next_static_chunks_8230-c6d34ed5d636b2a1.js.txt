@@ -1,0 +1,72 @@
+=== RESPONSE ===
+Time: 2026-03-04T16:43:05.174Z
+URL: https://leetcode.com/_next/static/chunks/8230-c6d34ed5d636b2a1.js
+Method: GET
+Status: 200
+From cache: true
+Response Headers:
+{
+  "age": [
+    "588"
+  ],
+  "cache-control": [
+    "public, max-age=3600"
+  ],
+  "cf-cache-status": [
+    "HIT"
+  ],
+  "cf-ray": [
+    "9d724129dac4114c-EWR"
+  ],
+  "content-encoding": [
+    "br"
+  ],
+  "content-type": [
+    "text/javascript"
+  ],
+  "date": [
+    "Wed, 04 Mar 2026 16:28:31 GMT"
+  ],
+  "etag": [
+    "W/\"4db27f8586955a6842f3735450159b0e\""
+  ],
+  "expires": [
+    "Wed, 04 Mar 2026 17:17:55 GMT"
+  ],
+  "last-modified": [
+    "Wed, 04 Mar 2026 08:18:31 GMT"
+  ],
+  "server": [
+    "cloudflare"
+  ],
+  "x-cache-status": [
+    "HIT"
+  ],
+  "x-content-type-options": [
+    "nosniff"
+  ],
+  "x-goog-generation": [
+    "1772612310912852"
+  ],
+  "x-goog-hash": [
+    "crc32c=RJgSBQ==",
+    "md5=TbJ/hYaVWmhC83NUUBWbDg=="
+  ],
+  "x-goog-metageneration": [
+    "1"
+  ],
+  "x-goog-storage-class": [
+    "STANDARD"
+  ],
+  "x-goog-stored-content-encoding": [
+    "identity"
+  ],
+  "x-goog-stored-content-length": [
+    "6616"
+  ],
+  "x-guploader-uploadid": [
+    "AGQBYWz2Ho9TpDsEcbm9dC2nKKIob4TnVeSKTvOqfdwZJrOb2SWh5WUiw_Pc1shxFdAJy4rB"
+  ]
+}
+Timing (partial): {}
+

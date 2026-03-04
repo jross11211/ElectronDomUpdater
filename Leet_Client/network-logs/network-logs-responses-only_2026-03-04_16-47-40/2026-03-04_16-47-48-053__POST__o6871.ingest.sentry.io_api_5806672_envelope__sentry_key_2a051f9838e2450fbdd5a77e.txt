@@ -1,0 +1,44 @@
+=== RESPONSE ===
+Time: 2026-03-04T16:47:48.054Z
+URL: https://o6871.ingest.sentry.io/api/5806672/envelope/?sentry_key=2a051f9838e2450fbdd5a77eb62cc83c&sentry_version=7&sentry_client=sentry.javascript.nextjs%2F7.51.2
+Method: POST
+Status: 200
+From cache: false
+Response Headers:
+{
+  "access-control-allow-origin": [
+    "*"
+  ],
+  "access-control-expose-headers": [
+    "x-sentry-error,x-sentry-rate-limits,retry-after"
+  ],
+  "alt-svc": [
+    "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+  ],
+  "content-length": [
+    "2"
+  ],
+  "content-type": [
+    "application/json"
+  ],
+  "cross-origin-resource-policy": [
+    "cross-origin"
+  ],
+  "date": [
+    "Wed, 04 Mar 2026 16:47:48 GMT"
+  ],
+  "server": [
+    "nginx"
+  ],
+  "strict-transport-security": [
+    "max-age=31536000; includeSubDomains; preload"
+  ],
+  "vary": [
+    "origin, access-control-request-method, access-control-request-headers"
+  ],
+  "via": [
+    "1.1 google"
+  ]
+}
+Timing (partial): {}
+
