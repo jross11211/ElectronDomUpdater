@@ -7,39 +7,56 @@ const originalFetch = window.fetch;
 window.fetch = async (...args: [any, any]) => {
     const [resource, init = {}] = args;
 
+    let requestBody: any = undefined;
+    if (init.body !== undefined && init.body !== null) {
+        try {
+            requestBody = JSON.parse(init.body);
+        } catch {
+            requestBody = init.body;
+        }
+    }
+
     const requestInfo = {
         url: typeof resource === 'string' ? resource : resource.url,
         method: init.method || 'GET',
+        headers: init.headers ?? {},
+        body: requestBody,
     };
 
     try {
         const response = await originalFetch(resource, init);
         const cloned = response.clone();
-
-        let body: string;
         const contentType = response.headers.get('content-type') || '';
 
-        console.log(JSON.stringify(response.headers))
+        // Log asynchronously so we don't block the page from getting its response
+        (async () => {
+            try {
+                let body: any;
+                if (contentType.includes('application/json')) {
+                    body = await cloned.json();
+                } else if (contentType.includes('text/')) {
+                    body = await cloned.text();
+                } else {
+                    body = `[binary: ${contentType}]`;
+                }
 
-        if (contentType.includes('application/json')) {
-            body = await cloned.json();
-        } else {
-            body = await cloned.text();
-        }
+                ipcRenderer.send('captured-response', {
+                    timestamp: new Date().toISOString(),
+                    request: requestInfo,
+                    response: {
+                        url: response.url,
+                        status: response.status,
+                        statusText: response.statusText,
+                        headers: JSON.stringify(response.headers),
+                        body,
+                    },
+                });
+            } catch (e) {
+                // don't let logging errors affect the page
+            }
+        })();
 
-        ipcRenderer.send('captured-response', {
-            timestamp: new Date().toISOString(),
-            request: requestInfo,
-            response: {
-                url: response.url,
-                status: response.status,
-                statusText: response.statusText,
-                headers: Object.fromEntries(response.headers),
-                body,
-            },
-        });
-
-        return response; // page gets the original response unchanged
+        return response;
     } catch (err) {
         ipcRenderer.send('captured-response', {
             timestamp: new Date().toISOString(),
