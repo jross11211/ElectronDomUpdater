@@ -1,4 +1,4 @@
-import {BrowserWindow} from "electron";
+import {BrowserWindow, ipcMain} from "electron";
 import fs from "fs";
 import {LIVE_CODESPACE_SOLUTION_PATH} from "../config.ts";
 
@@ -17,4 +17,8 @@ export const watchFileChanges = (mainWindow: BrowserWindow) => {
     fs.watch(LIVE_CODESPACE_SOLUTION_PATH, handleFileChange);
 
     handleFileChange();
+
+    ipcMain.on("tests-updated", (_, tests_output) => {
+        console.log(tests_output);
+    })
 }
