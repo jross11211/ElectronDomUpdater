@@ -1,8 +1,9 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import path from 'node:path';
-import {URL_TARGET} from "./config.ts";
+import {LIVE_CODESPACE_SOLUTION_PATH, URL_TARGET} from "./config.ts";
 import {watchFileChanges} from "./utils/watchFileChanges.ts";
 import waitForEditorLoad from "./injectables/waitForEditorLoad.js";
+import fs from "fs";
 
 app.on('ready', () => {
 
@@ -19,8 +20,9 @@ app.on('ready', () => {
       }
     });
 
-    ipcMain.once('app-fully-loaded', () => {
+    ipcMain.once('app-fully-loaded', (_, initialSolutionPy) => {
         watchFileChanges(mainWindow);
+        fs.writeFile(LIVE_CODESPACE_SOLUTION_PATH, initialSolutionPy, console.error)
         mainWindow.webContents.openDevTools();
     });
 

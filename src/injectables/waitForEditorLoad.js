@@ -27,10 +27,11 @@ export default function waitForEditorLoad(){
     });
 
     const observer = new MutationObserver(() => {
-        const editor_classes = document.getElementsByClassName("mtk4");
-        if (editor_classes.length > 0){
+        if (monaco && monaco.editor && monaco.editor.getEditors().length > 0 && monaco.editor.getEditors()[0].getValue()){
 
-            ipcRenderer.send('app-fully-loaded');
+            console.log(monaco.editor.getEditors()[0].getValue());
+
+            ipcRenderer.send('app-fully-loaded', monaco.editor.getEditors()[0].getValue());
 
             observer.disconnect()
         }
