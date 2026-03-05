@@ -26,6 +26,16 @@ export default function waitForEditorLoad(){
         model.setValue(newContent);
     });
 
+    ipcRenderer.on('run-code', () => {
+        const runBtn = document.querySelector('[data-e2e-locator="console-run-button"]');
+        if (runBtn) {
+            console.log('Clicking Run button');
+            runBtn.click();
+        } else {
+            console.error('Run button not found');
+        }
+    });
+
     const observer = new MutationObserver(() => {
         if (typeof monaco !== 'undefined' && monaco.editor && monaco.editor.getEditors().length > 0 && monaco.editor.getEditors()[0].getValue()){
 

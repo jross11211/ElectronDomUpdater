@@ -2,6 +2,7 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 old_pwd="$(pwd)"
 cd $PROJECT_ROOT
 
+rm -rf _live_code
 mkdir _live_code
 cd _live_code
 touch solution.py

@@ -1,6 +1,6 @@
 import {BrowserWindow, ipcMain} from "electron";
 import fs from "fs";
-import {LIVE_CODESPACE_SOLUTION_PATH, LIVE_CODESPACE_TESTS_OUTPUT_PATH, LIVE_CODESPACE_ARCHIVE_PATH} from "../config.ts";
+import {LIVE_CODESPACE_SOLUTION_PATH, LIVE_CODESPACE_TESTS_OUTPUT_PATH, LIVE_CODESPACE_ARCHIVE_PATH, LIVE_CODESPACE_RUN_PATH} from "../config.ts";
 
 let lastContent = '';
 
@@ -15,6 +15,11 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
             mainWindow.webContents.send('updated-solution', content);
             lastContent = content;
             fs.writeFileSync(archiveFile, content);
+        }
+
+        if (fs.existsSync(LIVE_CODESPACE_RUN_PATH)) {
+            fs.unlinkSync(LIVE_CODESPACE_RUN_PATH);
+            mainWindow.webContents.send('run-code');
         }
     }
 

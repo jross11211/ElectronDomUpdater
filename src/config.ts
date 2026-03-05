@@ -13,3 +13,4 @@ const getPath = (relative_path: string) => {
 export const LIVE_CODESPACE_ARCHIVE_PATH = getPath(process.env.ARCHIVE_FOLDER)
 export const LIVE_CODESPACE_SOLUTION_PATH = getPath(process.env.LIVE_CODESPACE_SOLUTION_FILE);
 export const LIVE_CODESPACE_TESTS_OUTPUT_PATH = getPath(process.env.LIVE_CODESPACE_TESTS_OUTPUT_FILE);
+export const LIVE_CODESPACE_RUN_PATH = getPath(process.env.LIVE_CODESPACE_RUN_FILE);
