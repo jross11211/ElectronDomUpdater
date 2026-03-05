@@ -2,13 +2,11 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 old_pwd="$(pwd)"
 cd $PROJECT_ROOT
 
-if [ ! -d "_live_code" ]; then
-    mkdir _live_code
-    cd _live_code
-    touch solution.py
-    touch tests_output.txt
-    cd ..
-fi
+mkdir _live_code
+cd _live_code
+touch solution.py
+touch tests_output.txt
+cd ..
 
 if [ ! -f "./.env" ]; then
   sh scripts/init_env

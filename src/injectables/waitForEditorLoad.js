@@ -27,11 +27,12 @@ export default function waitForEditorLoad(){
     });
 
     const observer = new MutationObserver(() => {
-        if (monaco && monaco.editor && monaco.editor.getEditors().length > 0 && monaco.editor.getEditors()[0].getValue()){
+        if (typeof monaco !== 'undefined' && monaco.editor && monaco.editor.getEditors().length > 0 && monaco.editor.getEditors()[0].getValue()){
 
             console.log(monaco.editor.getEditors()[0].getValue());
 
-            ipcRenderer.send('app-fully-loaded', monaco.editor.getEditors()[0].getValue());
+            const slug = window.location.pathname.split('/problems/')[1]?.replace(/\/+$/, '') ?? 'unknown';
+            ipcRenderer.send('app-fully-loaded', monaco.editor.getEditors()[0].getValue(), slug.split('/')[0]);
 
             observer.disconnect()
         }
