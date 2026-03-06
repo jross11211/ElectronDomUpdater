@@ -1,10 +1,10 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import path from 'node:path';
-import {LIVE_CODESPACE_SOLUTION_PATH, URL_TARGET} from "./config/constants.ts";
+import {URL_TARGET} from "./config/constants.ts";
 import {IPC_APP_FULLY_LOADED, IPC_UPDATED_SOLUTION, IPC_RUN_CODE} from "./config/ipcChannels.ts";
 import {watchFileChanges} from "./utils/watchFileChanges.ts";
 import waitForEditorLoad from "./injectables/waitForEditorLoad.js";
-import fs from "fs";
+import {writeSolutionsFile} from "./io/localFileSystemIO.ts";
 
 app.on('ready', () => {
 
@@ -24,7 +24,7 @@ app.on('ready', () => {
     ipcMain.once(IPC_APP_FULLY_LOADED, (_, initialSolutionPy, slug) => {
         console.log(IPC_APP_FULLY_LOADED, initialSolutionPy, slug)
         watchFileChanges(mainWindow, slug);
-        fs.writeFileSync(LIVE_CODESPACE_SOLUTION_PATH, initialSolutionPy);
+        writeSolutionsFile(initialSolutionPy);
         mainWindow.webContents.openDevTools();
     });
 
