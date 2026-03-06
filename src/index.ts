@@ -23,7 +23,7 @@ app.on('ready', () => {
     ipcMain.once('app-fully-loaded', (_, initialSolutionPy, slug) => {
         console.log('app-fully-loaded', initialSolutionPy, slug)
         watchFileChanges(mainWindow, slug);
-        fs.writeFile(LIVE_CODESPACE_SOLUTION_PATH, initialSolutionPy, console.error)
+        fs.writeFileSync(LIVE_CODESPACE_SOLUTION_PATH, initialSolutionPy, console.error)
         mainWindow.webContents.openDevTools();
     });
 

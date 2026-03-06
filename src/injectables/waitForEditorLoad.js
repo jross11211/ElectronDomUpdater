@@ -20,8 +20,24 @@ export default function waitForEditorLoad(){
         characterData: true
     });
 
+    const findEditor = () => {
+
+        if(typeof monaco === 'undefined' || !monaco.editor){
+            return null;
+        }
+
+        const editors = monaco.editor.getEditors();
+        for (const editor of editors) {
+            const model = editor.getModel();
+            if (model && model.getValue().trim().length > 0) {
+                return model;
+            }
+        }
+        return null;
+    }
+
     ipcRenderer.on('updated-solution', (_, newContent, runTests) => {
-        const model = monaco.editor.getModels()[0];
+        const model = findEditor();
         console.log('Code updated:', newContent);
         model.setValue(newContent);
 
@@ -47,12 +63,12 @@ export default function waitForEditorLoad(){
     });
 
     const observer = new MutationObserver(() => {
-        if (typeof monaco !== 'undefined' && monaco.editor && monaco.editor.getEditors().length > 0 && monaco.editor.getEditors()[0].getValue()){
+        if (findEditor() !== null){
 
-            console.log(monaco.editor.getEditors()[0].getValue());
+            console.log(findEditor().getValue());
 
             const slug = window.location.pathname.split('/problems/')[1]?.replace(/\/+$/, '') ?? 'unknown';
-            ipcRenderer.send('app-fully-loaded', monaco.editor.getEditors()[0].getValue(), slug.split('/')[0]);
+            ipcRenderer.send('app-fully-loaded', findEditor().getValue(), slug.split('/')[0]);
 
             observer.disconnect()
         }
