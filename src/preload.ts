@@ -26,8 +26,8 @@ window.fetch = async (...args: [any, any]) => {
         .then(body => {
             if (body?.status_runtime) {
                 console.log('[tests-updated] Result ready, sending to main:', `${body.total_correct}/${body.total_testcases} passed`);
-                ipcRenderer.sendSync('tests-updated', body);
-                console.log('[tests-updated] Main process acknowledged');
+                ipcRenderer.send('tests-updated', body);
+                console.log('[tests-updated] Sent to main');
             } else {
                 console.log('[tests-updated] Response has no status_runtime, skipping (likely still pending)');
             }
