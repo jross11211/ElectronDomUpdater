@@ -1,5 +1,6 @@
 import {BrowserWindow, ipcMain} from "electron";
 import fs from "fs";
+import {LRUCache} from "lru-cache";
 import {LIVE_CODESPACE_SOLUTION_PATH, LIVE_CODESPACE_TESTS_OUTPUT_PATH, LIVE_CODESPACE_ARCHIVE_PATH, LIVE_CODESPACE_RUN_PATH} from "../config.ts";
 import parseTestResults, {TestResult} from "./parseTestResults.ts";
 
@@ -47,15 +48,38 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
     const archiveFile = LIVE_CODESPACE_ARCHIVE_PATH + '/' + slug + '_solution.py';
 
     let lastContent = '';
+    let waitingForResults = false;
+    let pendingCode: string | null = null;
+    const resultsCache = new LRUCache<string, any>({ max: 10 });
+
     const handleFileChange = () => {
+        if (waitingForResults) {
+            console.log('[updated-solution] Waiting for test results, ignoring file change');
+            return;
+        }
+
         const content: string = fs.readFileSync(LIVE_CODESPACE_SOLUTION_PATH, 'utf8');
         if (content === lastContent) {
             console.log('[updated-solution] solution.py triggered but content unchanged, skipping');
             return;
         }
+
         console.log('[updated-solution] solution.py changed, processing...');
         let run_tests = isReadyForTesting();
-        mainWindow.webContents.send('updated-solution', content, run_tests);
+
+        if (run_tests && resultsCache.has(content)) {
+            console.log('[updated-solution] Cache hit, writing cached results');
+            mainWindow.webContents.send('updated-solution', content, false);
+            writeTestResults(resultsCache.get(content));
+        } else if (run_tests) {
+            console.log('[updated-solution] Cache miss, running tests');
+            waitingForResults = true;
+            pendingCode = content;
+            mainWindow.webContents.send('updated-solution', content, true);
+        } else {
+            mainWindow.webContents.send('updated-solution', content, false);
+        }
+
         console.log('[updated-solution] Sent to renderer');
         lastContent = content;
         fs.writeFileSync(archiveFile, content);
@@ -66,6 +90,12 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
 
     ipcMain.on("tests-updated", (_, tests_output) => {
         console.log('[tests-updated] Received in main');
+        if (pendingCode) {
+            console.log('[tests-updated] Caching results for pending code');
+            resultsCache.set(pendingCode, tests_output);
+            pendingCode = null;
+        }
+        waitingForResults = false;
         writeTestResults(tests_output);
     });
 }
