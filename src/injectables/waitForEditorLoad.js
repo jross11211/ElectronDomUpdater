@@ -6,12 +6,14 @@ export default function waitForEditorLoad(){
         if(typeof monaco === 'undefined' || !monaco.editor){
             return null;
         }
-        const editors = monaco.editor.getEditors();
-        for (const editor of editors) {
-            const model = editor.getModel();
-            if (model && model.getValue().trim().length > 0) {
-                return editor;
-            }
+
+        let editorCandidates = monaco.editor.getEditors()
+            .map(editor => editor.getModel())
+            .filter(model => model && typeof model.getValue !== 'undefined')
+            .filter(model => model.getValue().trim().length > 0);
+
+        if (editorCandidates){
+            return editorCandidates[0];
         }
         return null;
     }
