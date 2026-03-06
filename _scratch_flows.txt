@@ -1,13 +1,26 @@
---------------- Startup Flows ---------------
-    - When Electron Leetcode window loads the starting code:
-        - Save the starting code to the local _live_code/solution.py file
-        - Clear contents of tests_output.txt
+--------------- Startup Flow ---------------
+
+- When the Electron Leet-Code window loads the starting code:
+    [index.ts] BrowserWindow is created hidden, then loadURL navigates to the target problem.
+    [preload.ts] Before any page JS runs, window.fetch is monkey-patched to intercept submission responses.
+    [index.ts] Load page and inject waitForEditorLoad.js into the renderer.
+    [waitForEditorLoad.js] Once Monaco has loaded the initial editor text, send Ipc - 'app-fully-loaded' to main process.
+    [index.ts] Ipc - 'app-fully-loaded', and sets the initial _live_code/solution.py.
+    [index.ts] Writes the starter code to _live_code/solution.py, starts watchFileChanges, opens DevTools.
 
 --------------- Main Flows ---------------
-    - When a test result network response is received:
-        - Write the test result to the local _live_code/tests_output.txt
-    - When a _live_code/solution.py change is detected:
-        - If a _live_code/run.txt is discovered:
-            - We delete it
-            - Set the shouldRun to True
-        - Send the (newCode, shouldRun) to the client
+
+- When a test result network response is received:
+    [preload.ts] Detects a /submissions/detail completed request. Send ipc 'tests-updated'.
+    [watchFileChanges.ts] Ipc - 'tests-updated', parses result and saves to _live_code/tests_output.txt.
+
+- When _live_code/solution.py changes:
+    [watchFileChanges.ts] fs.watch fires, reads the new content.
+        - Deduplication check: if content hasn't changed, do nothing.
+        - If _live_code/run.txt exists:
+            - delete it and set shouldRun = true.
+        - Sends 'updated-solution' (newCode, shouldRun) to the renderer.
+        - Archives the latest code to _archive/<slug>_solution.py.
+    [waitForEditorLoad.js] Ipc - 'updated-solution':
+        - Update the Electron Leet-Code editor with the latest code
+        - If shouldRun is true, clicks [data-e2e-locator="console-run-button"].

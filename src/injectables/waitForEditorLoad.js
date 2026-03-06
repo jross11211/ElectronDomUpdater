@@ -12,7 +12,7 @@ export default function waitForEditorLoad(){
             .filter(model => model && typeof model.getValue !== 'undefined')
             .filter(model => model.getValue().trim().length > 0);
 
-        if (editorCandidates){
+        if (editorCandidates.length){
             return editorCandidates[0];
         }
 
