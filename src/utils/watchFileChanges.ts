@@ -1,7 +1,8 @@
 import {BrowserWindow, ipcMain} from "electron";
 import fs from "fs";
 import {LRUCache} from "lru-cache";
-import {LIVE_CODESPACE_SOLUTION_PATH, LIVE_CODESPACE_TESTS_OUTPUT_PATH, LIVE_CODESPACE_ARCHIVE_PATH, LIVE_CODESPACE_RUN_PATH} from "../config.ts";
+import {LIVE_CODESPACE_SOLUTION_PATH, LIVE_CODESPACE_TESTS_OUTPUT_PATH, LIVE_CODESPACE_ARCHIVE_PATH, LIVE_CODESPACE_RUN_PATH} from "../config/constants.ts";
+import {IPC_UPDATED_SOLUTION, IPC_TESTS_UPDATED} from "../config/ipcChannels.ts";
 import parseTestResults, {TestResult} from "./parseTestResults.ts";
 
 const isReadyForTesting = () => {
@@ -69,15 +70,15 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
 
         if (run_tests && resultsCache.has(content)) {
             console.log('[updated-solution] Cache hit, writing cached results');
-            mainWindow.webContents.send('updated-solution', content, false);
+            mainWindow.webContents.send(IPC_UPDATED_SOLUTION, content, false);
             writeTestResults(resultsCache.get(content));
         } else if (run_tests) {
             console.log('[updated-solution] Cache miss, running tests');
             waitingForResults = true;
             pendingCode = content;
-            mainWindow.webContents.send('updated-solution', content, true);
+            mainWindow.webContents.send(IPC_UPDATED_SOLUTION, content, true);
         } else {
-            mainWindow.webContents.send('updated-solution', content, false);
+            mainWindow.webContents.send(IPC_UPDATED_SOLUTION, content, false);
         }
 
         console.log('[updated-solution] Sent to renderer');
@@ -88,7 +89,7 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
 
     fs.watch(LIVE_CODESPACE_SOLUTION_PATH, handleFileChange);
 
-    ipcMain.on("tests-updated", (_, tests_output) => {
+    ipcMain.on(IPC_TESTS_UPDATED, (_, tests_output) => {
         console.log('[tests-updated] Received in main');
         if (pendingCode) {
             console.log('[tests-updated] Caching results for pending code');

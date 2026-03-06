@@ -1,6 +1,7 @@
 import {ipcRenderer} from 'electron';
 import fs from 'fs';
 import path from 'node:path';
+import {IPC_TESTS_UPDATED} from './config/ipcChannels.ts';
 
 const TESTS_OUTPUT_PATH = path.join(process.cwd(), '_live_code', 'tests_output.txt');
 
@@ -26,7 +27,7 @@ window.fetch = async (...args: [any, any]) => {
         .then(body => {
             if (body?.status_runtime) {
                 console.log('[tests-updated] Result ready, sending to main:', `${body.total_correct}/${body.total_testcases} passed`);
-                ipcRenderer.send('tests-updated', body);
+                ipcRenderer.send(IPC_TESTS_UPDATED, body);
                 console.log('[tests-updated] Sent to main');
             } else {
                 console.log('[tests-updated] Response has no status_runtime, skipping (likely still pending)');

@@ -1,4 +1,4 @@
-export default function waitForEditorLoad(){
+export default function waitForEditorLoad(IPC_APP_FULLY_LOADED, IPC_UPDATED_SOLUTION, IPC_RUN_CODE){
 
     const {ipcRenderer} = require('electron');
 
@@ -19,7 +19,7 @@ export default function waitForEditorLoad(){
         return null;
     }
 
-    ipcRenderer.on('updated-solution', (_, newContent, runTests) => {
+    ipcRenderer.on(IPC_UPDATED_SOLUTION, (_, newContent, runTests) => {
         console.log('[updated-solution] Received in renderer, runTests:', runTests);
         activeEditor.setValue(newContent);
         console.log('[updated-solution] Editor updated');
@@ -34,7 +34,7 @@ export default function waitForEditorLoad(){
         }
     });
 
-    ipcRenderer.on('run-code', () => {
+    ipcRenderer.on(IPC_RUN_CODE, () => {
         const runBtn = document.querySelector('[data-e2e-locator="console-run-button"]');
         if (runBtn) {
             console.log('Clicking Run button');
@@ -54,7 +54,7 @@ export default function waitForEditorLoad(){
             console.log(activeEditor.getValue());
 
             const slug = window.location.pathname.split('/problems/')[1]?.replace(/\/+$/, '') ?? 'unknown';
-            ipcRenderer.send('app-fully-loaded', activeEditor.getValue(), slug.split('/')[0]);
+            ipcRenderer.send(IPC_APP_FULLY_LOADED, activeEditor.getValue(), slug.split('/')[0]);
 
             observer.disconnect()
         }

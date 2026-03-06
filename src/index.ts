@@ -1,6 +1,7 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import path from 'node:path';
-import {LIVE_CODESPACE_SOLUTION_PATH, URL_TARGET} from "./config.ts";
+import {LIVE_CODESPACE_SOLUTION_PATH, URL_TARGET} from "./config/constants.ts";
+import {IPC_APP_FULLY_LOADED, IPC_UPDATED_SOLUTION, IPC_RUN_CODE} from "./config/ipcChannels.ts";
 import {watchFileChanges} from "./utils/watchFileChanges.ts";
 import waitForEditorLoad from "./injectables/waitForEditorLoad.js";
 import fs from "fs";
@@ -20,8 +21,8 @@ app.on('ready', () => {
       }
     });
 
-    ipcMain.once('app-fully-loaded', (_, initialSolutionPy, slug) => {
-        console.log('app-fully-loaded', initialSolutionPy, slug)
+    ipcMain.once(IPC_APP_FULLY_LOADED, (_, initialSolutionPy, slug) => {
+        console.log(IPC_APP_FULLY_LOADED, initialSolutionPy, slug)
         watchFileChanges(mainWindow, slug);
         fs.writeFileSync(LIVE_CODESPACE_SOLUTION_PATH, initialSolutionPy);
         mainWindow.webContents.openDevTools();
@@ -30,7 +31,7 @@ app.on('ready', () => {
     mainWindow.loadURL(URL_TARGET)
         .then(() => mainWindow.show())
         .then(() => mainWindow.webContents.executeJavaScript(
-            `(${String(waitForEditorLoad)})()`
+            `(${String(waitForEditorLoad)})('${IPC_APP_FULLY_LOADED}', '${IPC_UPDATED_SOLUTION}', '${IPC_RUN_CODE}')`
         ))
         .catch(console.error);
 });
