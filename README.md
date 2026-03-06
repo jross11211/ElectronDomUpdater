@@ -1,26 +1,32 @@
-# Leet Code IDE Connector!
+# LeetCode IDE Connector
 
 **Why use it?**
-You want the full IDE experience whilst grinding LeetCode!
+You want the full IDE experience whilst grinding LeetCode — use your own editor, keybindings, extensions, and tools instead of the browser editor.
 
 **How it works:**
-- Load a LeetCode problem page and save the initial solution to the local `_live_code/solution.py`.
-- When you edit the `_live_code/solution.py`, it pushes code to the code editor in the LeetCode window.
-- When you (or your IDE) runs `scripts/ide_run/run_leet_test_cases`, LeetCode 
-- Saves test results to a local `_live_code/tests_output.txt`
+- Loads a LeetCode problem page and saves the starter code to `_live_code/solution.py`.
+- When you edit `_live_code/solution.py`, it pushes your code into the LeetCode editor automatically.
+- When your IDE runs `scripts/ide_run/run_leet_test_cases`, a trigger file is created that causes the run button to be clicked on your next save.
+- Test results are written to `_live_code/tests_output.txt` after each run.
 
 **Is this allowed?**
-Probably? There is front end script injection, but absolutely no manipulation with the https requests between the client and server. This app is made to enhance the LeetCode experience. This app is not made for cheating or hacking in any way.
+This is a personal developer productivity tool, not a cheating aid. It does not solve problems, generate answers, or automate any decision-making. All it does is sync code you write in your own editor into the LeetCode browser editor, and write test results back to a local file — the same actions you would take manually.
 
-**Quick start:**
-```bash
-sh scripts/make   # build it
+Under the hood, it uses client-side script injection (similar in nature to a browser extension) and passively reads network responses from requests that you initiate yourself. It does not manipulate, spoof, or replay any requests to LeetCode's servers.
+
+That said, I can't guarantee it complies with LeetCode's Terms of Service in all situations or forever. If you're unsure, review their ToS before use.
 
 ### Install
-`sh scripts/make`
+```bash
+sh scripts/make
+```
 
 ### Run
-`sh scripts/start`
+```bash
+sh scripts/start
+```
 
 ### Clean
-`sh scripts/clean`
+```bash
+sh scripts/clean
+```
