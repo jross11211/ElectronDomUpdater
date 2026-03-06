@@ -1,0 +1,13 @@
+--------------- Startup Flows ---------------
+    - When Electron Leetcode window loads the starting code:
+        - Save the starting code to the local _live_code/solution.py file
+        - Clear contents of tests_output.txt
+
+--------------- Main Flows ---------------
+    - When a test result network response is received:
+        - Write the test result to the local _live_code/tests_output.txt
+    - When a _live_code/solution.py change is detected:
+        - If a _live_code/run.txt is discovered:
+            - We delete it
+            - Set the shouldRun to True
+        - Send the (newCode, shouldRun) to the client
