@@ -20,10 +20,17 @@ export default function waitForEditorLoad(){
     }
 
     ipcRenderer.on('updated-solution', (_, newContent, runTests) => {
+        console.log('[updated-solution] Received in renderer, runTests:', runTests);
         activeEditor.setValue(newContent);
-        const runTestsButton = document.querySelector('[data-e2e-locator="console-run-button"]');
-        if (runTests && runTestsButton) {
-            runTestsButton.click();
+        console.log('[updated-solution] Editor updated');
+        if (runTests) {
+            const runTestsButton = document.querySelector('[data-e2e-locator="console-run-button"]');
+            if (runTestsButton) {
+                console.log('[updated-solution] Clicking Run button');
+                runTestsButton.click();
+            } else {
+                console.error('[updated-solution] Run button not found');
+            }
         }
     });
 

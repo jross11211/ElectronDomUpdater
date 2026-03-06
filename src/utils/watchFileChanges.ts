@@ -6,8 +6,10 @@ import parseTestResults, {TestResult} from "./parseTestResults.ts";
 const isReadyForTesting = () => {
     if (fs.existsSync(LIVE_CODESPACE_RUN_PATH)) {
         fs.unlinkSync(LIVE_CODESPACE_RUN_PATH);
+        console.log('[updated-solution] run.txt found and deleted → shouldRun: true');
         return true;
     }
+    console.log('[updated-solution] No run.txt → shouldRun: false');
     return false;
 }
 
@@ -47,17 +49,23 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
     let lastContent = '';
     const handleFileChange = () => {
         const content: string = fs.readFileSync(LIVE_CODESPACE_SOLUTION_PATH, 'utf8');
-        if (content !== lastContent) {
-            let run_tests = isReadyForTesting();
-            mainWindow.webContents.send('updated-solution', content, run_tests);
-            lastContent = content;
-            fs.writeFileSync(archiveFile, content);
+        if (content === lastContent) {
+            console.log('[updated-solution] solution.py triggered but content unchanged, skipping');
+            return;
         }
+        console.log('[updated-solution] solution.py changed, processing...');
+        let run_tests = isReadyForTesting();
+        mainWindow.webContents.send('updated-solution', content, run_tests);
+        console.log('[updated-solution] Sent to renderer');
+        lastContent = content;
+        fs.writeFileSync(archiveFile, content);
+        console.log('[updated-solution] Archived to', archiveFile);
     }
 
     fs.watch(LIVE_CODESPACE_SOLUTION_PATH, handleFileChange);
 
     ipcMain.on("tests-updated", (_, tests_output) => {
+        console.log('[tests-updated] Received in main');
         writeTestResults(tests_output);
     });
 }
