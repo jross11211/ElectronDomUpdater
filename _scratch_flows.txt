@@ -1,15 +1,12 @@
 --------------- Startup Flow ---------------
-
 - When the Electron Leet-Code window loads the starting code:
     [index.ts] BrowserWindow is created hidden, then loadURL navigates to the target problem.
     [preload.ts] Before any page JS runs, window.fetch is monkey-patched to intercept submission responses.
     [index.ts] Load page and inject waitForEditorLoad.js into the renderer.
-    [waitForEditorLoad.js] Once Monaco has loaded the initial editor text, send Ipc - 'app-fully-loaded' to main process.
-    [index.ts] Ipc - 'app-fully-loaded', and sets the initial _live_code/solution.py.
-    [index.ts] Writes the starter code to _live_code/solution.py, starts watchFileChanges, opens DevTools.
+    [waitForEditorLoad.js] Once Monaco has loaded the initial editor text, send Ipc - 'app-fully-loaded'.
+    [index.ts] Ipc - 'app-fully-loaded': writes starter code to _live_code/solution.py
 
 --------------- Main Flows ---------------
-
 - When a test result network response is received:
     [preload.ts] Detects a /submissions/detail completed request. Send ipc 'tests-updated'.
     [watchFileChanges.ts] Ipc - 'tests-updated', parses result and saves to _live_code/tests_output.txt.
@@ -23,4 +20,4 @@
         - Archives the latest code to _archive/<slug>_solution.py.
     [waitForEditorLoad.js] Ipc - 'updated-solution':
         - Update the Electron Leet-Code editor with the latest code
-        - If shouldRun is true, clicks button to submit solution for test evaluation.
+        - If shouldRun is true, clicks the Run button to evaluate against sample test cases.
