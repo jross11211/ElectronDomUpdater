@@ -12,14 +12,14 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
     const handleFileChange = () => {
         const content: string = fs.readFileSync(LIVE_CODESPACE_SOLUTION_PATH, 'utf8');
         if (content !== lastContent) {
-            mainWindow.webContents.send('updated-solution', content);
+            let run_tests = false;
+            if (fs.existsSync(LIVE_CODESPACE_RUN_PATH)) {
+                fs.unlinkSync(LIVE_CODESPACE_RUN_PATH);
+                run_tests = true;
+            }
+            mainWindow.webContents.send('updated-solution', content, run_tests);
             lastContent = content;
             fs.writeFileSync(archiveFile, content);
-        }
-
-        if (fs.existsSync(LIVE_CODESPACE_RUN_PATH)) {
-            fs.unlinkSync(LIVE_CODESPACE_RUN_PATH);
-            mainWindow.webContents.send('run-code');
         }
     }
 

@@ -20,10 +20,20 @@ export default function waitForEditorLoad(){
         characterData: true
     });
 
-    ipcRenderer.on('updated-solution', (_, newContent) => {
+    ipcRenderer.on('updated-solution', (_, newContent, runTests) => {
         const model = monaco.editor.getModels()[0];
         console.log('Code updated:', newContent);
         model.setValue(newContent);
+
+        if (runTests) {
+            const runBtn = document.querySelector('[data-e2e-locator="console-run-button"]');
+            if (runBtn) {
+                console.log('Clicking Run button');
+                runBtn.click();
+            } else {
+                console.error('Run button not found');
+            }
+        }
     });
 
     ipcRenderer.on('run-code', () => {
