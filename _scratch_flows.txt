@@ -23,4 +23,4 @@
         - Archives the latest code to _archive/<slug>_solution.py.
     [waitForEditorLoad.js] Ipc - 'updated-solution':
         - Update the Electron Leet-Code editor with the latest code
-        - If shouldRun is true, clicks [data-e2e-locator="console-run-button"].
+        - If shouldRun is true, clicks button to submit solution for test evaluation.
