@@ -20,7 +20,12 @@ export default function waitForEditorLoad(){
         characterData: true
     });
 
+    let cachedEditor = null;
     const findEditor = () => {
+
+        if (cachedEditor) {
+            return cachedEditor;
+        }
 
         if(typeof monaco === 'undefined' || !monaco.editor){
             return null;
@@ -30,9 +35,11 @@ export default function waitForEditorLoad(){
         for (const editor of editors) {
             const model = editor.getModel();
             if (model && model.getValue().trim().length > 0) {
+                cachedEditor = model;
                 return model;
             }
         }
+
         return null;
     }
 
