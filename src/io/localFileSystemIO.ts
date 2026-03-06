@@ -9,16 +9,16 @@ import {
 /* -------- `_live_code/solutions.py` -------- */
 export const watchSolutionsFile = (listener: (content: string) => void) => {
     return fs.watch(LIVE_CODESPACE_SOLUTION_PATH, () => {
-        listener(fs.readFileSync(LIVE_CODESPACE_SOLUTION_PATH, 'utf8'));
+        listener(readLocalFile(LIVE_CODESPACE_SOLUTION_PATH));
     });
 }
 export const writeSolutionsFile = (content: string) => {
-    fs.writeFile(LIVE_CODESPACE_SOLUTION_PATH, content, console.error);
+    writeLocalFile(LIVE_CODESPACE_SOLUTION_PATH, content);
 }
 
 /* -------- `_live_code/tests_output.txt` -------- */
 export const writeTestsFile = (content: string) => {
-    fs.writeFile(LIVE_CODESPACE_TESTS_OUTPUT_PATH, content, { encoding: 'utf-8' }, console.error);
+    writeLocalFile(LIVE_CODESPACE_TESTS_OUTPUT_PATH, content);
 }
 
 /* -------- `_archive` -------- */
@@ -28,7 +28,7 @@ export const makeArchiveDir = () => {
 
 /* -------- `_archive/{id}_solution.py` -------- */
 export const writeArchiveFile = (archiveFile: string, content: string) => {
-    fs.writeFile(archiveFile, content, console.error);
+    writeLocalFile(archiveFile, content);
 }
 
 /* -------- `_live_code/run.txt` -------- */
@@ -38,4 +38,12 @@ export const checkIfRunTxtExists = () => {
         return true;
     }
     return false;
+}
+
+const readLocalFile = (fileName: string) => {
+    return fs.readFileSync(fileName, 'utf8')
+}
+
+const writeLocalFile = (fileName: string, content: string) => {
+    fs.writeFile(fileName, content, { encoding: 'utf-8' }, console.error);
 }
