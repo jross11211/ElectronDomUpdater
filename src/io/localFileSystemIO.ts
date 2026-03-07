@@ -8,8 +8,8 @@ import {
 import logger from "../utils/logger.ts";
 
 const trimContentForLog = (content: string) => {
-    const maxChars = 25;
-    return '\n' + content.substring(0, maxChars);
+    const maxChars = 50;
+    return '\n' + content.substring(0, maxChars) + '...\n';
 }
 
 /* -------- `_live_code/solutions.py` -------- */
@@ -55,5 +55,9 @@ const readLocalFile = (fileName: string) => {
 }
 
 const writeLocalFile = (fileName: string, content: string) => {
-    fs.writeFile(fileName, content, { encoding: 'utf-8' }, err => logger.error('io', err));
+    fs.writeFile(fileName, content, { encoding: 'utf-8' }, err => {
+        if(err){
+            console.error(`Failed to write file at path`, fileName, err)
+        }
+    });
 }

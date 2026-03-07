@@ -50,5 +50,5 @@ app.on('ready', () => {
             );
         })
         .then(() => logger.trace('startup', 'Startup flow complete'))
-        .catch(err => logger.error('startup', err));
+        .catch(console.error);
 });

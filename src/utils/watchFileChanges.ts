@@ -11,8 +11,6 @@ import {
 } from "../io/localFileSystemIO.ts";
 import logger from "./logger.ts";
 
-
-
 function formatTestResult(t: TestResult): string {
     const status = t.passed ? 'PASSED' : 'FAILED';
     let out = `Test ${t.testIndex + 1}: ${status}\n`;
