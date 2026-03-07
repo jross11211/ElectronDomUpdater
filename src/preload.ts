@@ -11,7 +11,7 @@ window.fetch = async (...args: [any, any]) => {
     const url = typeof resource === 'string' ? resource : resource.url;
     if (!url.includes('/submissions/detail/')) return response;
 
-    console.log('[tests-updated] /submissions/detail/ intercepted:', url);
+    // console.log('[tests-updated] /submissions/detail/ intercepted:', url);
 
     const cloned = response.clone();
     const contentType = response.headers.get('content-type') || '';
@@ -21,7 +21,7 @@ window.fetch = async (...args: [any, any]) => {
         .then(body => {
             if (body?.status_runtime) {
                 ipcRenderer.send(ipcChannels.IPC_TESTS_UPDATED, body);
-                console.log('[tests-updated] Sent to main', body);
+                // console.log('[tests-updated] Sent to main', body);
             }
         })
         .catch(console.error);

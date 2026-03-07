@@ -9,6 +9,9 @@ import {
     writeArchiveFile,
     writeTestsFile
 } from "../io/localFileSystemIO.ts";
+import logger from "./logger.ts";
+
+
 
 function formatTestResult(t: TestResult): string {
     const status = t.passed ? 'PASSED' : 'FAILED';
@@ -25,6 +28,7 @@ function formatTestResult(t: TestResult): string {
 }
 
 function writeTestResults(body: any) {
+    logger.trace('leet-code-server-test-result', 'Parsing test results');
     const testResults = parseTestResults(body);
     const timestamp = new Date().toLocaleString();
     const header = `${timestamp}\n${body.pretty_lang ?? ''} | ${body.status_runtime ?? ''} | ${body.status_memory ?? ''} | ${body.total_correct ?? 0}/${body.total_testcases ?? 0} passed\n`;
@@ -35,7 +39,7 @@ function writeTestResults(body: any) {
 }
 
 export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
-
+    logger.trace('live-solution-updated', 'Setting up file watchers');
     makeArchiveDir();
 
     let lastContent = '';
@@ -45,24 +49,21 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
 
     watchSolutionsFile(content => {
         if (waitingForResults) {
-            console.log('[updated-solution] Waiting for test results, ignoring file change');
             return;
         }
-
         if (content === lastContent) {
-            console.log('[updated-solution] solution.py triggered but content unchanged, skipping');
             return;
         }
 
-        console.log('[updated-solution] solution.py changed, processing...');
-        let run_tests = checkIfRunTxtExists();
+        logger.trace('live-solution-updated', 'watchSolutionsFile.ts - solutions.py changed');
+
+        const run_tests = checkIfRunTxtExists();
 
         if (run_tests && resultsCache.has(content)) {
-            console.log('[updated-solution] Cache hit, writing cached results');
+            logger.trace('live-solution-updated', 'watchSolutionsFile.ts - cache hit, skipping test evaluation');
             mainWindow.webContents.send(ipcChannels.IPC_UPDATED_SOLUTION, content, false);
             writeTestResults(resultsCache.get(content));
         } else if (run_tests) {
-            console.log('[updated-solution] Cache miss, running tests');
             waitingForResults = true;
             pendingCode = content;
             mainWindow.webContents.send(ipcChannels.IPC_UPDATED_SOLUTION, content, true);
@@ -70,19 +71,21 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
             mainWindow.webContents.send(ipcChannels.IPC_UPDATED_SOLUTION, content, false);
         }
 
-        console.log('[updated-solution] Sent to renderer');
         lastContent = content;
         const archiveFile = LIVE_CODESPACE_ARCHIVE_PATH + '/' + slug + '_solution.py';
-        writeArchiveFile(archiveFile, content)
+        writeArchiveFile(archiveFile, content);
+        logger.trace('live-solution-updated', 'Flow complete');
     });
 
     ipcMain.on(ipcChannels.IPC_TESTS_UPDATED, (_, tests_output) => {
-        console.log('[tests-updated] Received in main');
+        logger.trace('leet-code-server-test-result', 'IPC_TESTS_UPDATED received');
+
         if (pendingCode) {
-            console.log('[tests-updated] Caching results for pending code');
+            logger.trace('leet-code-server-test-result', 'Caching results for pending code');
             resultsCache.set(pendingCode, tests_output);
             pendingCode = null;
         }
+
         waitingForResults = false;
         writeTestResults(tests_output);
     });

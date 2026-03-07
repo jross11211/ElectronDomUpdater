@@ -5,8 +5,10 @@ import {watchFileChanges} from "./utils/watchFileChanges.ts";
 import waitForEditorLoad from "./injectables/waitForEditorLoad.js";
 import ipcChannels, {getIpcChannelsWrapper} from "./injectables/ipcChannels.js";
 import {writeSolutionsFile} from "./io/localFileSystemIO.ts";
+import logger from "./utils/logger.ts";
 
 app.on('ready', () => {
+    logger.trace('startup', 'App ready, creating main window');
 
     const mainWindow = new BrowserWindow({
       show: false,
@@ -22,19 +24,31 @@ app.on('ready', () => {
     });
 
     ipcMain.once(ipcChannels.IPC_APP_FULLY_LOADED, (_, initialSolutionPy, slug) => {
-        console.log(ipcChannels.IPC_APP_FULLY_LOADED, initialSolutionPy, slug)
+        logger.trace('app-loaded', `IPC_APP_FULLY_LOADED received (slug: ${slug})`);
         watchFileChanges(mainWindow, slug);
         writeSolutionsFile(initialSolutionPy);
         mainWindow.webContents.openDevTools();
+        logger.trace('app-loaded', 'Flow complete');
     });
 
+    logger.trace('startup', `Loading URL: ${URL_TARGET}`);
     mainWindow.loadURL(URL_TARGET)
-        .then(() => mainWindow.show())
-        .then(() => mainWindow.webContents.executeJavaScript(
-            `(${String(getIpcChannelsWrapper)})()`
-        ))
-        .then(() => mainWindow.webContents.executeJavaScript(
-            `(${String(waitForEditorLoad)})()`
-        ))
-        .catch(console.error);
+        .then(() => {
+            logger.trace('startup', 'URL loaded, showing window');
+            mainWindow.show();
+        })
+        .then(() => {
+            logger.trace('startup', 'Injecting IPC channels wrapper');
+            return mainWindow.webContents.executeJavaScript(
+                `(${String(getIpcChannelsWrapper)})()`
+            );
+        })
+        .then(() => {
+            logger.trace('startup', 'Injecting waitForEditorLoad');
+            return mainWindow.webContents.executeJavaScript(
+                `(${String(waitForEditorLoad)})()`
+            );
+        })
+        .then(() => logger.trace('startup', 'Startup flow complete'))
+        .catch(err => logger.error('startup', err));
 });

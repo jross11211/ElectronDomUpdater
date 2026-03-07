@@ -20,9 +20,8 @@ export default function waitForEditorLoad(){
     }
 
     ipcRenderer.on(ipcChannels.IPC_UPDATED_SOLUTION, (_, newContent, runTests) => {
-        console.log('[updated-solution] Received in renderer, runTests:', runTests);
+        console.log('ipc - [updated-solution] - (newContent, runTests)', newContent, runTests);
         activeEditor.setValue(newContent);
-        console.log('[updated-solution] Editor updated');
         if (runTests) {
             const runTestsButton = document.querySelector('[data-e2e-locator="console-run-button"]');
             if (runTestsButton) {
@@ -34,24 +33,13 @@ export default function waitForEditorLoad(){
         }
     });
 
-    ipcRenderer.on(ipcChannels.IPC_RUN_CODE, () => {
-        const runBtn = document.querySelector('[data-e2e-locator="console-run-button"]');
-        if (runBtn) {
-            console.log('Clicking Run button');
-            runBtn.click();
-        } else {
-            console.error('Run button not found');
-        }
-    });
-
     let activeEditor = null;
     const observer = new MutationObserver(() => {
 
         activeEditor = checkIfEditorReady();
 
         if (activeEditor){
-
-            console.log(activeEditor.getValue());
+            console.log('[startup] - Active editor is ready!');
 
             const slug = window.location.pathname.split('/problems/')[1]?.replace(/\/+$/, '') ?? 'unknown';
             ipcRenderer.send(ipcChannels.IPC_APP_FULLY_LOADED, activeEditor.getValue(), slug.split('/')[0]);

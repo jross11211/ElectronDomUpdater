@@ -5,19 +5,28 @@ import {
     LIVE_CODESPACE_SOLUTION_PATH,
     LIVE_CODESPACE_TESTS_OUTPUT_PATH
 } from "../config/constants.ts";
+import logger from "../utils/logger.ts";
+
+const trimContentForLog = (content: string) => {
+    const maxChars = 25;
+    return '\n' + content.substring(0, maxChars);
+}
 
 /* -------- `_live_code/solutions.py` -------- */
 export const watchSolutionsFile = (listener: (content: string) => void) => {
+    logger.trace('io', `Watching: ${LIVE_CODESPACE_SOLUTION_PATH}`);
     return fs.watch(LIVE_CODESPACE_SOLUTION_PATH, () => {
         listener(readLocalFile(LIVE_CODESPACE_SOLUTION_PATH));
     });
 }
 export const writeSolutionsFile = (content: string) => {
+    logger.trace('io', 'Writing solutions.py', trimContentForLog(content));
     writeLocalFile(LIVE_CODESPACE_SOLUTION_PATH, content);
 }
 
 /* -------- `_live_code/tests_output.txt` -------- */
 export const writeTestsFile = (content: string) => {
+    logger.trace('io', 'Writing tests_output.txt', trimContentForLog(content));
     writeLocalFile(LIVE_CODESPACE_TESTS_OUTPUT_PATH, content);
 }
 
@@ -34,6 +43,7 @@ export const writeArchiveFile = (archiveFile: string, content: string) => {
 /* -------- `_live_code/run.txt` -------- */
 export const checkIfRunTxtExists = () => {
     if (fs.existsSync(LIVE_CODESPACE_RUN_PATH)) {
+        logger.trace('io', `detected - run.txt! Asking front-end to run the code ...`);
         fs.unlinkSync(LIVE_CODESPACE_RUN_PATH);
         return true;
     }
@@ -41,11 +51,9 @@ export const checkIfRunTxtExists = () => {
 }
 
 const readLocalFile = (fileName: string) => {
-    console.log(fileName);
     return fs.readFileSync(fileName, 'utf8')
 }
 
 const writeLocalFile = (fileName: string, content: string) => {
-    console.log(fileName);
-    fs.writeFile(fileName, content, { encoding: 'utf-8' }, console.error);
+    fs.writeFile(fileName, content, { encoding: 'utf-8' }, err => logger.error('io', err));
 }
