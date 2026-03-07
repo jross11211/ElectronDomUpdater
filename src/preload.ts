@@ -1,6 +1,9 @@
 import {ipcRenderer} from 'electron';
-import ipcChannels from "./injectables/ipcChannels.js";
 import logger from "./utils/logger.ts";
+import {ipcChannels} from "./config/constants.ts";
+
+// @ts-ignore
+window.ipcChannels = ipcChannels;
 
 // Intercept fetch to capture LeetCode submission results
 const originalFetch = window.fetch;

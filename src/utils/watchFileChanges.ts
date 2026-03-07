@@ -1,7 +1,6 @@
 import {BrowserWindow, ipcMain} from "electron";
 import {LRUCache} from "lru-cache";
-import {LIVE_CODESPACE_ARCHIVE_PATH} from "../config/constants.ts";
-import ipcChannels from "../injectables/ipcChannels.js";
+import {ipcChannels, LIVE_CODESPACE_ARCHIVE_PATH} from "../config/constants.ts";
 import parseTestResults, {TestResult} from "./parseTestResults.ts";
 import {
     checkIfRunTxtExists, makeArchiveDir,
