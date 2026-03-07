@@ -1,6 +1,6 @@
 import {BrowserWindow, ipcMain} from "electron";
 import {LRUCache} from "lru-cache";
-import {ipcChannels, LIVE_CODESPACE_ARCHIVE_PATH} from "../config/constants.ts";
+import {IPC_EVENTS, LIVE_CODESPACE_ARCHIVE_PATH} from "../config/constants.ts";
 import parseTestResults, {TestResult} from "./parseTestResults.ts";
 import {
     checkIfRunTxtExists, makeArchiveDir,
@@ -58,14 +58,14 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
 
         if (run_tests && resultsCache.has(content)) {
             logger.trace('live-solution-updated', 'watchSolutionsFile.ts - cache hit, skipping test evaluation');
-            mainWindow.webContents.send(ipcChannels.IPC_UPDATED_SOLUTION, content, false);
+            mainWindow.webContents.send(IPC_EVENTS.EDITED_SOLUTION, content, false);
             writeTestResults(resultsCache.get(content));
         } else if (run_tests) {
             waitingForResults = true;
             pendingCode = content;
-            mainWindow.webContents.send(ipcChannels.IPC_UPDATED_SOLUTION, content, true);
+            mainWindow.webContents.send(IPC_EVENTS.EDITED_SOLUTION, content, true);
         } else {
-            mainWindow.webContents.send(ipcChannels.IPC_UPDATED_SOLUTION, content, false);
+            mainWindow.webContents.send(IPC_EVENTS.EDITED_SOLUTION, content, false);
         }
 
         lastContent = content;
@@ -74,7 +74,7 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
         logger.trace('live-solution-updated', 'Flow complete');
     });
 
-    ipcMain.on(ipcChannels.IPC_TESTS_UPDATED, (_, tests_output) => {
+    ipcMain.on(IPC_EVENTS.TEST_RESULTS_ARRIVED, (_, tests_output) => {
         logger.trace('leet-code-server-test-result', 'IPC_TESTS_UPDATED received');
 
         if (pendingCode) {

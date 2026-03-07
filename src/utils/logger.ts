@@ -9,10 +9,7 @@ const getCallerName = (): string => {
 const logger = {
     trace: (flow: string, msg: string, ...args: any[]) => {
         console.log(`[${flow}] ${getCallerName()} - ${msg}`, ...args);
-    },
-    error: (flow: string, err?: any) => {
-        if (err) console.error(`[${flow}] ${getCallerName()}`, err);
-    },
+    }
 };
 
 export default logger;

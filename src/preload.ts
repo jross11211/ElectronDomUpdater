@@ -1,6 +1,6 @@
 import {ipcRenderer} from 'electron';
 import logger from "./utils/logger.ts";
-import {ipcChannels} from "./config/constants.ts";
+import {IPC_EVENTS} from "./config/constants.ts";
 
 // -------- Monaco editor detection --------
 
@@ -19,7 +19,7 @@ const checkIfEditorReady = () => {
 
 let activeEditor: any = null;
 
-ipcRenderer.on(ipcChannels.IPC_UPDATED_SOLUTION, (_, newContent, runTests) => {
+ipcRenderer.on(IPC_EVENTS.EDITED_SOLUTION, (_, newContent, runTests) => {
     logger.trace('updated-solution', `Received (runTests=${runTests})`);
     activeEditor?.setValue(newContent);
     if (runTests) {
@@ -36,7 +36,7 @@ const observer = new MutationObserver(() => {
     if (activeEditor) {
         logger.trace('startup', 'Monaco editor ready, sending IPC_APP_FULLY_LOADED');
         const slug = window.location.pathname.split('/problems/')[1]?.replace(/\/+$/, '') ?? 'unknown';
-        ipcRenderer.send(ipcChannels.IPC_APP_FULLY_LOADED, activeEditor.getValue(), slug.split('/')[0]);
+        ipcRenderer.send(IPC_EVENTS.APP_FULLY_LOADED, activeEditor.getValue(), slug.split('/')[0]);
         observer.disconnect();
     }
 });
@@ -61,8 +61,8 @@ window.fetch = async (...args: [any, any]) => {
     cloned.json()
         .then(body => {
             if (body?.status_runtime) {
-                ipcRenderer.send(ipcChannels.IPC_TESTS_UPDATED, body);
-                logger.trace(ipcChannels.IPC_TESTS_UPDATED, 'Test rests received from LeetCode.com! Saving...');
+                ipcRenderer.send(IPC_EVENTS.TEST_RESULTS_ARRIVED, body);
+                logger.trace(IPC_EVENTS.TEST_RESULTS_ARRIVED, 'Test rests received from LeetCode.com! Saving...');
             }
         })
         .catch(console.error);

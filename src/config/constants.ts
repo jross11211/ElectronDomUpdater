@@ -12,9 +12,8 @@ export const LIVE_CODESPACE_RUN_PATH = getLiveCodeSpacePath(process.env.LIVE_COD
 
 export const URL_TARGET = process.env.URL_TARGET;
 
-export const ipcChannels = {
-    IPC_APP_FULLY_LOADED: 'app-fully-loaded',
-    IPC_UPDATED_SOLUTION: 'updated-solution',
-    IPC_TESTS_UPDATED: 'tests-updated',
-    IPC_RUN_CODE: 'run-code'
+export const IPC_EVENTS = {
+    APP_FULLY_LOADED: 'app-fully-loaded',
+    EDITED_SOLUTION: 'edited-solution',
+    TEST_RESULTS_ARRIVED: 'test-results-arrived',
 };

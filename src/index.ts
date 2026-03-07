@@ -1,6 +1,6 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import path from 'node:path';
-import {ipcChannels, URL_TARGET} from "./config/constants.ts";
+import {IPC_EVENTS, URL_TARGET} from "./config/constants.ts";
 import {watchFileChanges} from "./utils/watchFileChanges.ts";
 import {writeSolutionsFile} from "./io/localFileSystemIO.ts";
 import logger from "./utils/logger.ts";
@@ -21,7 +21,7 @@ app.on('ready', () => {
       }
     });
 
-    ipcMain.once(ipcChannels.IPC_APP_FULLY_LOADED, (_, initialSolutionPy, slug) => {
+    ipcMain.once(IPC_EVENTS.APP_FULLY_LOADED, (_, initialSolutionPy, slug) => {
         logger.trace('app-loaded', `IPC_APP_FULLY_LOADED received (slug: ${slug})`);
         watchFileChanges(mainWindow, slug);
         writeSolutionsFile(initialSolutionPy);
