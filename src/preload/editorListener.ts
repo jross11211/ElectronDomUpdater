@@ -1,8 +1,6 @@
 import {ipcRenderer} from 'electron';
-import logger from "./utils/logger.ts";
-import {IPC_EVENTS} from "./config/constants.ts";
-
-// -------- Monaco editor detection --------
+import logger from "../utils/logger.ts";
+import {IPC_EVENTS} from "../config/constants.ts";
 
 declare var monaco: any;
 
@@ -34,7 +32,7 @@ ipcRenderer.on(IPC_EVENTS.EDITED_SOLUTION, (_, newContent, runTests) => {
 const observer = new MutationObserver(() => {
     activeEditor = checkIfEditorReady();
     if (activeEditor) {
-        logger.trace('startup', 'Monaco editor ready, sending IPC_APP_FULLY_LOADED');
+        logger.trace('startup', 'Monaco editor ready, sending APP_FULLY_LOADED');
         const slug = window.location.pathname.split('/problems/')[1]?.replace(/\/+$/, '') ?? 'unknown';
         ipcRenderer.send(IPC_EVENTS.APP_FULLY_LOADED, activeEditor.getValue(), slug.split('/')[0]);
         observer.disconnect();
@@ -42,30 +40,3 @@ const observer = new MutationObserver(() => {
 });
 
 observer.observe(document, { childList: true, subtree: true });
-
-// -------- Fetch intercept for test results --------
-
-const originalFetch = window.fetch;
-
-window.fetch = async (...args: [any, any]) => {
-    const [resource, init = {}] = args;
-    const response = await originalFetch(resource, init);
-
-    const url = typeof resource === 'string' ? resource : resource.url;
-    if (!url.includes('/submissions/detail/')) return response;
-
-    const cloned = response.clone();
-    const contentType = response.headers.get('content-type') || '';
-    if (!contentType.includes('application/json')) return response;
-
-    cloned.json()
-        .then(body => {
-            if (body?.status_runtime) {
-                ipcRenderer.send(IPC_EVENTS.TEST_RESULTS_ARRIVED, body);
-                logger.trace(IPC_EVENTS.TEST_RESULTS_ARRIVED, 'Test rests received from LeetCode.com! Saving...');
-            }
-        })
-        .catch(console.error);
-
-    return response;
-};

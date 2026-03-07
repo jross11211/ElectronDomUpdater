@@ -20,7 +20,7 @@ export default {
           target: 'main',
         },
         {
-          entry: 'src/preload.ts',
+          entry: 'src/preload/index.ts',
           config: viteConfigFile,
           target: 'preload',
         }
