@@ -1,9 +1,7 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import path from 'node:path';
-import {URL_TARGET} from "./config/constants.ts";
+import {ipcChannels, URL_TARGET} from "./config/constants.ts";
 import {watchFileChanges} from "./utils/watchFileChanges.ts";
-import waitForEditorLoad from "./injectables/waitForEditorLoad.js";
-import {ipcChannels} from "./config/constants.ts";
 import {writeSolutionsFile} from "./io/localFileSystemIO.ts";
 import logger from "./utils/logger.ts";
 
@@ -36,12 +34,6 @@ app.on('ready', () => {
         .then(() => {
             logger.trace('startup', 'URL loaded, showing window');
             mainWindow.show();
-        })
-        .then(() => {
-            logger.trace('startup', 'Injecting waitForEditorLoad');
-            return mainWindow.webContents.executeJavaScript(
-                `(${String(waitForEditorLoad)})()`
-            );
         })
         .then(() => logger.trace('startup', 'Startup flow complete'))
         .catch(console.error);
