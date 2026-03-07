@@ -1,5 +1,5 @@
 import {ipcRenderer} from 'electron';
-import {IPC_TESTS_UPDATED} from './config/ipcChannels.ts';
+import ipcChannels from "./injectables/ipcChannels.js";
 
 // Intercept fetch to capture LeetCode submission results
 const originalFetch = window.fetch;
@@ -20,7 +20,7 @@ window.fetch = async (...args: [any, any]) => {
     cloned.json()
         .then(body => {
             if (body?.status_runtime) {
-                ipcRenderer.send(IPC_TESTS_UPDATED, body);
+                ipcRenderer.send(ipcChannels.IPC_TESTS_UPDATED, body);
                 console.log('[tests-updated] Sent to main', body);
             }
         })

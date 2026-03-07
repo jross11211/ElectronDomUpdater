@@ -41,9 +41,11 @@ export const checkIfRunTxtExists = () => {
 }
 
 const readLocalFile = (fileName: string) => {
+    console.log(fileName);
     return fs.readFileSync(fileName, 'utf8')
 }
 
 const writeLocalFile = (fileName: string, content: string) => {
+    console.log(fileName);
     fs.writeFile(fileName, content, { encoding: 'utf-8' }, console.error);
 }

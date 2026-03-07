@@ -1,7 +1,7 @@
 import {BrowserWindow, ipcMain} from "electron";
 import {LRUCache} from "lru-cache";
 import {LIVE_CODESPACE_ARCHIVE_PATH} from "../config/constants.ts";
-import {IPC_UPDATED_SOLUTION, IPC_TESTS_UPDATED} from "../config/ipcChannels.ts";
+import ipcChannels from "../injectables/ipcChannels.js";
 import parseTestResults, {TestResult} from "./parseTestResults.ts";
 import {
     checkIfRunTxtExists, makeArchiveDir,
@@ -59,15 +59,15 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
 
         if (run_tests && resultsCache.has(content)) {
             console.log('[updated-solution] Cache hit, writing cached results');
-            mainWindow.webContents.send(IPC_UPDATED_SOLUTION, content, false);
+            mainWindow.webContents.send(ipcChannels.IPC_UPDATED_SOLUTION, content, false);
             writeTestResults(resultsCache.get(content));
         } else if (run_tests) {
             console.log('[updated-solution] Cache miss, running tests');
             waitingForResults = true;
             pendingCode = content;
-            mainWindow.webContents.send(IPC_UPDATED_SOLUTION, content, true);
+            mainWindow.webContents.send(ipcChannels.IPC_UPDATED_SOLUTION, content, true);
         } else {
-            mainWindow.webContents.send(IPC_UPDATED_SOLUTION, content, false);
+            mainWindow.webContents.send(ipcChannels.IPC_UPDATED_SOLUTION, content, false);
         }
 
         console.log('[updated-solution] Sent to renderer');
@@ -76,7 +76,7 @@ export const watchFileChanges = (mainWindow: BrowserWindow, slug: string) => {
         writeArchiveFile(archiveFile, content)
     });
 
-    ipcMain.on(IPC_TESTS_UPDATED, (_, tests_output) => {
+    ipcMain.on(ipcChannels.IPC_TESTS_UPDATED, (_, tests_output) => {
         console.log('[tests-updated] Received in main');
         if (pendingCode) {
             console.log('[tests-updated] Caching results for pending code');
